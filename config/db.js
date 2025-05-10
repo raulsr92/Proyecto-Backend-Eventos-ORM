@@ -2,7 +2,7 @@ console.log("Hola Mundo, soy Raúl en el archivo db")
 
 // Importación de paquetes
 
-import _mysql from 'mysql2'
+import _mysql from 'mysql2/promise'
 
 // Crear pool de conexiones
 
