@@ -100,22 +100,26 @@ export const create = async function(req, res){
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
 
-export const update = function(req, res){
+export const update = async function(req, res){
+    console.log("------------controller update ------------");
 
-    const objEvento = req.body
-    console.log(objEvento)
-    seventos.update(req.params.id,objEvento)
-    .then( NumRegistros =>{
+    try {
+        // Lo que se recibe por parte del usuario:
+            const objEvento = req.body
+            console.log(`Evento a actualizar: `)
+            console.log(objEvento)
 
-        console.log("....despues de seventos.update()");
-        res.json({"NumeroRegistrosModificados":NumRegistros});
+        //Invocamos al servicio UPDATE y guardamos el resultado en una variable (el Nro de filas modificadas)
 
-        })
-    .catch(
-        err => {
+            let NumRegistros = await seventos.update(req.params.id,objEvento);
+            console.log("....despues de seventos.update()");
+            res.json({"NumeroRegistrosModificados":NumRegistros});
+
+        
+    } catch (error) {
         res.status(500).json({"error":"Error actualizando registros"});
     }
-)
+
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
