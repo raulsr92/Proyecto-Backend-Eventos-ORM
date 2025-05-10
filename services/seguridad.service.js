@@ -26,33 +26,26 @@ export const logueo = function (objLogin) {
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método Login
 
-export const login = function (objUsuario) {
+export const login = async function (objUsuario) {
+
     console.log("----------------------Servicio de Login--------------------")
-    return new Promise ((resolve, reject)=>{
-        pool.query( 
-            `
-                select 
-	                id_usuario,nom_usuario,correo_usuario,pass_usuario,rol_usuario,
-	                case 
-		                when Activo = 1 then 'Usuario Activo'
-		                when Activo = 0 then 'Usuario Inactivo'
-	                end as Activo
-                from
+    const [results, fields] = await pool.query( 
+            `select 
+	            id_usuario,nom_usuario,correo_usuario,pass_usuario,rol_usuario,
+	            case 
+		            when Activo = 1 then 'Usuario Activo'
+		            when Activo = 0 then 'Usuario Inactivo'
+	            end as Activo
+            from
                 tb_usuario
-                where correo_usuario=? and fingreso_usuario=1
-            `
-            ,[objUsuario.correo_usuario]
-            ,(err, results,fields)=>
-            {
-                console.log(results);
-                if(err){
-                    reject(err)
-                } else{
-                    resolve(results)
-                }
-            })
-    })
+            where correo_usuario=? and fingreso_usuario=1`
+
+            ,[objUsuario.correo_usuario])
+
+            console.log(results);
+            return results
 }
+
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método Fin user by ID
 

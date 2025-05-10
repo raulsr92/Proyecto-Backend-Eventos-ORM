@@ -28,14 +28,21 @@ export const logueo = function(req, res){
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método Login
 
-export const login = function (req, res) {
-    console.log("------------controller------------");
-    const reqUsuario = req.body;
-    console.log(reqUsuario)
-    
-    sseguridad.login(reqUsuario)
-    .then((usuarios) => {
+export const login = async function (req, res) {
+    console.log("------------controller Login------------");
+
+    try {
+        //Lo que se recibe por parte del usuario
+        const reqUsuario = req.body;
+        console.log("Usuario que intenta logearse: ")
+        console.log(reqUsuario)
+
+        //Invocamos al servicio login y guardamos el resultado
+        let usuarios = await sseguridad.login(reqUsuario);
         //Validar que exista usuario
+        console.log("Usuario encontrado: ")
+        console.log(usuarios[0])
+
         if (usuarios[0]) {
 
             //Validar que la contraseña seal a misma a la almacenada en BD
@@ -61,18 +68,16 @@ export const login = function (req, res) {
                     }
                 )
             } else {
-                res.status(403).json({"error":"Acceso no autorizado"})
+                res.status(403).json({"error":"Acceso no autorizado: contraseña incorrecta"})
             }
-
-        } else{
-            res.status(403).json({"error":"Acceso no autorizado"})
+            
+        }else{
+            res.status(403).json({"error":"Acceso no autorizado: usuario no existe"})
         }
-      }
-    )
-    .catch(err => {
-        console.log(err);
+
+    } catch (error) {
         res.status(500).json({"error":"Error obteniendo registros"});
-    });
+    }
 }
 
 
