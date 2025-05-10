@@ -63,24 +63,19 @@ export const getAll = async function (req, res) {
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getById
 
-export const getById = function (req, res) {
-    console.log("------------controller------------");
+export const getById =  async function (req, res) {
 
-    seventos.getById(req.params.id)
-    .then( objEventos =>{
+    console.log("------------controller getById------------");
 
-            console.log("....despues de seventos.getById()");
+    try {
+        let objEventos = await seventos.getById(req.params.id);
+        console.log("....despues de seventos.getById()");
+        res.json(objEventos || [] )
 
-            res.json(objEventos || [] )
+    } catch (error) {
+                    res.status(500).json({"error":"Error obteniendo registros"});
 
-    })
-    .catch(
-        err => {
-            res.status(500).json({"error":"Error obteniendo registros"});
-        }
-    )
-
-    /*res.send(arrEventoJson.arreglo[req.params.id])*/
+    }
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método create
