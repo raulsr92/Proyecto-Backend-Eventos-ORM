@@ -83,23 +83,24 @@ export const login = async function (req, res) {
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩ Método Refresh Token
 
-export const refreshToken = function (req, res) {
-    console.log("------------Seguridad controller------------");
-    const {refreshToken} = req.body;
-    console.log(`RefreshToken: ${refreshToken}`)
+export const refreshToken = async function (req, res) {
+    console.log("------------Seguridad controller refresh token------------");
+    try {
+        //Lo que se recibe por parte del usuario
+        const {refreshToken} = req.body;
+        console.log(`RefreshToken: ${refreshToken}`)
+        if (!refreshToken) {
+            return res.status(401).json({"error":"Refresh token requerido"});
+        }
 
-    if (!refreshToken) {
-        return res.status(401).json({"error":"Refresh token requerido"});
-    }
-    const decoded = auth.verifyRefreshToken(refreshToken)
+        const decoded = auth.verifyRefreshToken(refreshToken)
+        console.log(`Decoded(playload):`)
+        console.log(decoded)
+        console.log(`Decoded(playload) con ID:`)
+        console.log(decoded.id_persona)
 
-    console.log(`Decoded(playload):`)
-    console.log(decoded)
-    console.log(`Decoded(playload) con ID:`)
-    console.log(decoded.id_persona)
-
-    sseguridad.findUserById(decoded.id_persona)
-    .then(usuarios =>{
+        //Invocamos al servicio login y guardamos el resultado
+        let usuarios = await sseguridad.findUserById(decoded.id_persona)
         console.log(`Resultado del finById:`)
         console.log(usuarios)
 
@@ -120,13 +121,8 @@ export const refreshToken = function (req, res) {
         } else{
             res.status(403).json( {"error":"Acceso no autorizado"} );
         }
-    }
-    )
-    .catch(
-        err =>{
-            console.log(err);
-            res.status(500).json({"error":"Error obteniendo registros"});  
-        }
-    )
 
+    } catch (error) {
+        res.status(500).json({"error":"Error obteniendo registros"});  
+    }
 }

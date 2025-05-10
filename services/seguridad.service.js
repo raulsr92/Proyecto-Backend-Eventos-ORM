@@ -49,28 +49,20 @@ export const login = async function (objUsuario) {
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método Fin user by ID
 
-export const findUserById = function (id_usuario) {
+export const findUserById = async function (id_usuario) {
     console.log("----------------------Servicio de Login--------------------")
-    return new Promise ((resolve, reject)=>{
-        pool.query( 
+
+    const [results, fields] = await pool.query( 
             `
-                select 
-	                id_usuario,nom_usuario,correo_usuario,pass_usuario,rol_usuario,
-	                case 
-		                when Activo = 1 then 'Usuario Activo'
-		                when Activo = 0 then 'Usuario Inactivo'
-	                end as Activo
-                from tb_usuario  where id_usuario=? and fingreso_usuario=1
+            select 
+                id_usuario,nom_usuario,correo_usuario,pass_usuario,rol_usuario,
+	            case 
+                    when Activo = 1 then 'Usuario Activo'
+		            when Activo = 0 then 'Usuario Inactivo'
+	            end as Activo
+            from tb_usuario  where id_usuario=? and fingreso_usuario=1
             `
-            ,[id_usuario]
-            ,(err, results,fields)=>
-            {
-                console.log(results);
-                if(err){
-                    reject(err)
-                } else{
-                    resolve(results)
-                }
-            })
-    })
+            ,[id_usuario]);
+            console.log(results);
+            return results
 }
