@@ -45,24 +45,19 @@ const arrEventoJson={
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getAll
 
-export const getAll = function (req, res) {
+export const getAll = async function (req, res) {
 
     console.log("------------controller------------");
 
-    seventos.getAll()
-    .then( eventos =>{
+    try {
+        let eventos = await seventos.getAll();
+        console.log("....despues de seventos.getAll()");
+        res.json(eventos || [] )
 
-            console.log("....despues de seventos.getAll()");
+    } catch (error) {
+        res.status(500).json({"error":"Error obteniendo registros"});
 
-            res.json(eventos || [] )
-
-    })
-    .catch(
-        err => {
-            res.status(500).json({"error":"Error obteniendo registros"});
-        }
-    )
-    /*res.send(arrEventoJson.arreglo)*/
+    }
 }
 
 
