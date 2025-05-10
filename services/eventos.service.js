@@ -46,22 +46,18 @@ export const getById = async function (Id_Evento) {
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método create
 
-export const create = function (objEvento) {
+export const create = async function (objEvento) {
  
     console.log("----------------------Service Insertar nuevo Evento--------------------")
     
-    return new Promise( (resolve, reject) =>{
-        pool.query( 'INSERT INTO tb_evento (Nombre_Evento,Fecha_Evento,Hora_Evento, Id_Cate, Id_Local) VALUES (?, ?,?, ?,?)',
-                    [objEvento.Nombre_Evento, objEvento.Fecha_Evento,objEvento.Hora_Evento,objEvento.Id_Cate,objEvento.Id_Local],(err, results, fields)=>{
+    const [results, fields] = await pool.query( 
+            `INSERT INTO tb_evento (Nombre_Evento,Fecha_Evento,Hora_Evento, Id_Cate, Id_Local) 
+            VALUES (?, ?,?, ?,?)`,
+            [objEvento.Nombre_Evento, objEvento.Fecha_Evento,objEvento.Hora_Evento,
+             objEvento.Id_Cate,objEvento.Id_Local])
+
             console.log(results);
-            if(err){
-                reject(err)
-            } else{
-                resolve(results.insertId)
-            }
-        })
-    }
-    )
+            return results.insertId;
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update

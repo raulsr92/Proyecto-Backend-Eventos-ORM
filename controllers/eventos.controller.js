@@ -80,26 +80,22 @@ export const getById =  async function (req, res) {
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método create
 
-export const create = function(req, res){
+export const create = async function(req, res){
+    console.log("------------controller create ------------");
+    try {
+            // Lo que se recibde por parte del usuario:
+            const objEvento = req.body
+            console.log(`Evento a crear: `)
+            console.log(objEvento)
 
-    const objEvento = req.body
-    console.log(`Evento a crear: `)
-    console.log(objEvento)
-    seventos.create(objEvento)
-    .then( idEvento =>{
+            //Invocamos al servicio crear y guardamos el resultado en una variable (el ID de evento creado)
+            let idEventoCreado = await seventos.create(objEvento)
+            console.log("....despues de seventos.create()");
+            res.json({"IdEvento":idEventoCreado});
 
-        console.log("....despues de seventos.create()");
-        res.json({"IdEvento":idEvento});
-
-        })
-    .catch(
-        err => {
+    } catch (error) {
         res.status(500).json({"error":"Error ingresando registros"});
     }
-)
-
-    //arrEventoJson.arreglo.push(objEvento)
-    /*res.send(objEvento)*/
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
