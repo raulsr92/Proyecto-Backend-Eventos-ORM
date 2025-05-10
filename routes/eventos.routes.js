@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get("/",ceventos.getAll);
 router.get("/:id",ceventos.getById);
-router.post("/",mauth.authMiddleware() ,ceventos.create)
+router.post("/",mauth.authMiddleware(["administrador"]) ,ceventos.create)
 router.put("/:id",mauth.authMiddleware(["administrador"]),ceventos.update)
 router.delete("/:id",mauth.authMiddleware(["administrador"]),ceventos.deleteRow)
 
