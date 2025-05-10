@@ -80,20 +80,14 @@ export const update = async function (Id_Evento, objEvento) {
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
 
-export const deleteRow = function (activo,Id_Evento) {
+export const deleteRow = async function (activo,Id_Evento) {
  
-    console.log("----------------------Service Modificar Evento--------------------")
+    console.log("----------------------Service Delete (modificar activo false) Evento--------------------")
     
-    return new Promise( (resolve, reject) =>{
-        pool.query( 'update tb_evento set Activo=?  where Id_Evento = ?',
-                    [activo,Id_Evento],(err, results, fields)=>{
-            console.log(results);
-            if(err){
-                reject(err)
-            } else{
-                resolve(results.affectedRows)
-            }
-        })
-    }
-    )
+    const [results, fields] = await pool.query(
+            `update tb_evento set Activo=?  where Id_Evento = ?`,
+                    [activo,Id_Evento])
+        
+        console.log(results);
+        return results.affectedRows; 
 }

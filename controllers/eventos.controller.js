@@ -125,18 +125,16 @@ export const update = async function(req, res){
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
 
 
-export const deleteRow = function(req, res){
+export const deleteRow = async function(req, res){
 
-    seventos.deleteRow('false',req.params.id)
-    .then( NumRegistros =>{
+    console.log("------------controller delete ------------");
 
+    try {
+        let NumRegistros = await seventos.deleteRow('false',req.params.id);
         console.log("....despues de seventos.deleteRow()");
         res.json({"NumeroRegistrosModificados":NumRegistros});
-
-        })
-    .catch(
-        err => {
+        
+    } catch (error) {
         res.status(500).json({"error":"Error eliminando registros"});
     }
-)
 }
