@@ -71,3 +71,24 @@ export const create = async function (objEvento) {
     console.log(results);
     return results;
 }
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
+
+export const update = async function (Id_Evento, objEvento) {
+ 
+    console.log("----------------------Model Modificar Evento--------------------")
+    
+    const [results, fields] = await orm.query( 
+            `update tb_evento 
+             set Nombre_Evento = ?, Fecha_Evento = ?, Hora_Evento=?,Id_Cate =?,Id_Local=?,Activo=? 
+             where Id_Evento = ?`,
+             {
+                replacements:[objEvento.Nombre_Evento, objEvento.Fecha_Evento,objEvento.Hora_Evento,
+                    objEvento.Id_Cate,objEvento.Id_Local,objEvento.Activo,Id_Evento]
+             }
+            );
+             
+        console.log(`Resultados en modelo:`)
+        console.log(`Filas afectadas: ${results.affectedRows}`);
+        return results.affectedRows;      
+}

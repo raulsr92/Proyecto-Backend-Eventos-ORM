@@ -56,16 +56,11 @@ export const update = async function (Id_Evento, objEvento) {
  
     console.log("----------------------Service Modificar Evento--------------------")
     
-    const [results, fields] = await pool.query( 
-            `update tb_evento 
-             set Nombre_Evento = ?, Fecha_Evento = ?, Hora_Evento=?,Id_Cate =?,Id_Local=?,Activo=? 
-             where Id_Evento = ?`,
-            [objEvento.Nombre_Evento, objEvento.Fecha_Evento,
-             objEvento.Hora_Evento,objEvento.Id_Cate,objEvento.Id_Local,objEvento.Activo,
-             Id_Evento]) 
-       
-        console.log(results);
-        return results.affectedRows;      
+    const filasAfectadas = await modelEvento.update(Id_Evento,objEvento)
+    
+    console.log(`Resultados en servicio:`)
+    console.log(`Filas afectadas: ${filasAfectadas}`);
+    return filasAfectadas;      
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
