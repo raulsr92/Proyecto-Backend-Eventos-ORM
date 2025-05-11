@@ -73,8 +73,7 @@ export const getById =  async function (req, res) {
         res.json(objEventos || [] )
 
     } catch (error) {
-                    res.status(500).json({"error":"Error obteniendo registros"});
-
+        res.status(500).json({"error":"Error obteniendo registros"});
     }
 }
 
