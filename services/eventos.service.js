@@ -1,7 +1,9 @@
 
 //Importar pool de conexiones
-
 import pool from '../config/db.js'
+
+//Importar el modelo de eventos (sequelize)
+import * as modelEvento from '../models/evento.model.js'
 
 // Crear funciones
 
@@ -10,16 +12,12 @@ import pool from '../config/db.js'
 export const getAll = async function () {
  
     console.log("----------------------Service--------------------")
-    
-    const [results, fields] = await pool.query( 
-        `select E.Id_Evento,E.Nombre_Evento, E.Fecha_Evento,
-                C.Nom_Categoria, L.Nom_Local, L.Capacidad_Local 
-         from tb_evento E 
-         inner join tb_categoria C 
-         on E.Id_Cate = C.Id_Cate 
-         inner join tb_local L 
-         on E.Id_Local = L.Id_Local order by E.Id_Evento`)
 
+    //Llamado al método getAll del modelo de eventos
+    
+    const results = await modelEvento.getAll();
+
+    console.log(`Resultados en servicio:`)
     console.log(results);
     return results;
 }
