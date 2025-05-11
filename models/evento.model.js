@@ -27,3 +27,24 @@ export const getAll = async function () {
     console.log(results);
     return results;
 }
+
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método create
+
+export const create = async function (objEvento) {
+ 
+    console.log("----------------------Model Insertar nuevo Evento--------------------")
+    
+    const [results, metadata] = await orm.query( 
+            `INSERT INTO tb_evento (Nombre_Evento,Fecha_Evento,Hora_Evento, Id_Cate, Id_Local) 
+            VALUES (?, ?,?, ?,?)`,
+            {
+                replacements:[objEvento.Nombre_Evento, objEvento.Fecha_Evento,objEvento.Hora_Evento,
+             objEvento.Id_Cate,objEvento.Id_Local]
+            }
+            );
+
+    console.log(`Resultados en modelo:`)
+    console.log(results);
+    return results;
+}

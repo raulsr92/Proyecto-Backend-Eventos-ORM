@@ -48,14 +48,12 @@ export const create = async function (objEvento) {
  
     console.log("----------------------Service Insertar nuevo Evento--------------------")
     
-    const [results, fields] = await pool.query( 
-            `INSERT INTO tb_evento (Nombre_Evento,Fecha_Evento,Hora_Evento, Id_Cate, Id_Local) 
-            VALUES (?, ?,?, ?,?)`,
-            [objEvento.Nombre_Evento, objEvento.Fecha_Evento,objEvento.Hora_Evento,
-             objEvento.Id_Cate,objEvento.Id_Local])
+    let idEventoCreado = await modelEvento.create(objEvento);
+    
+    console.log(`Resultados en servicio:`)
 
-            console.log(results);
-            return results.insertId;
+    console.log(`idEvento: ${idEventoCreado}`);
+    return idEventoCreado;
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
