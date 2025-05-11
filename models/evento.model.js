@@ -92,3 +92,20 @@ export const update = async function (Id_Evento, objEvento) {
         console.log(`Filas afectadas: ${results.affectedRows}`);
         return results.affectedRows;      
 }
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
+
+export const deleteRow = async function (activo,Id_Evento) {
+ 
+    console.log("----------------------Model Delete (modificar activo false) Evento--------------------")
+    
+    const [results, fields] = await orm.query(
+            `update tb_evento set Activo=?  where Id_Evento = ?`,
+            {
+                replacements:[activo,Id_Evento]
+            });
+    
+        console.log(`Resultados en modelo:`)
+        console.log(`Filas afectadas: ${results.affectedRows}`);
+        return results.affectedRows; 
+}

@@ -69,10 +69,9 @@ export const deleteRow = async function (activo,Id_Evento) {
  
     console.log("----------------------Service Delete (modificar activo false) Evento--------------------")
     
-    const [results, fields] = await pool.query(
-            `update tb_evento set Activo=?  where Id_Evento = ?`,
-                    [activo,Id_Evento])
+    const filasAfectadas = await modelEvento.deleteRow(activo,Id_Evento)
         
-        console.log(results);
-        return results.affectedRows; 
+    console.log(`Resultados en servicio:`)
+    console.log(`Filas afectadas: ${filasAfectadas}`);
+    return filasAfectadas;  
 }
