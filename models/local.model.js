@@ -6,7 +6,7 @@ import orm from '../config/sequelize.js'
 
 //Definiendo modelo "Local"
 
-export const Marca = orm.define('tb_local',
+export const Local = orm.define('tb_local',
     {
         Id_Local:{
             type: DataTypes.INTEGER,
@@ -14,7 +14,8 @@ export const Marca = orm.define('tb_local',
             autoIncrement:true
         },
         Nom_Local:{
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(150),
+            allowNull: false,
             //Establecer longitud
             validate: {
                 len: [1, 150],
@@ -23,13 +24,15 @@ export const Marca = orm.define('tb_local',
         },
         Ubigeo:{
             type: DataTypes.STRING(6),
+            allowNull: false,
             validate: {
                 len: [6, 6],
+                is: /^[0-9]{6}$/
             },
-            isNumeric: true  
         },
         Direc_Local:{
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(150),
+            allowNull: false,
             validate: {
                 len: [1, 150],
             } 
@@ -38,10 +41,11 @@ export const Marca = orm.define('tb_local',
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
-            notNull: {
-                msg: 'Se requiere la capacidad del local',
+                notNull: {
+                    msg: 'Se requiere la capacidad del local',
+                },
+                isInt: true  
             },
-            }
         }
     },
     {
@@ -55,6 +59,11 @@ export const Marca = orm.define('tb_local',
 // f para establecer la conexión a la base de datos
 
 export const connect = async function() {
-    await orm.authenticate();
-    console.log("conexion establecida");
+    try {
+        await orm.authenticate();
+        console.log("Conexión establecida");
+    } catch (error) {
+        console.error("Error al conectar:", error);
+    }
 }
+
