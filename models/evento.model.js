@@ -31,7 +31,7 @@ export const Evento = orm.define('tb_evento',
             type: DataTypes.DATE,
             validate:{
                 isDate: true,
-                isAfter: new Date().toISOString.split('T')[0] // Asegura que sea una fecha en el futuro
+                isAfter: new Date().toISOString().split('T')[0] // Asegura que sea una fecha en el futuro
             }
         },
         Hora_Evento:{
@@ -82,17 +82,6 @@ export const Evento = orm.define('tb_evento',
         timestamps: false,
     })
 
-// f para establecer la conexión a la base de datos
-
-export const connect = async function() {
-    try {
-        await orm.authenticate();
-        console.log("Conexión establecida");
-    } catch (error) {
-        console.error("Error al conectar:", error);
-    }
-}
-
 // Relaciones entre tablas (Associations)
 
 // ============> Entre tabla Evento y Local
@@ -110,6 +99,17 @@ Evento.belongsTo(
         foreignKey: 'Id_Local'
     }
 )
+
+// f para establecer la conexión a la base de datos
+
+export const connect = async function() {
+    try {
+        await orm.authenticate();
+        console.log("Conexión establecida");
+    } catch (error) {
+        console.error("Error al conectar:", error);
+    }
+}
 
 // ============> Entre tabla Evento y Categoría
 
@@ -133,6 +133,43 @@ export const getAll = async function () {
  
     console.log("----------------------Model--------------------")
     
+    const results = await Evento.findAll(
+        {
+            //Campos que quiero mostrar de la tabla Eventos
+            attributes: ['Id_Evento','Nombre_Evento','Fecha_Evento'],
+            include:
+            [
+                {
+                    model: Categoria,
+                    //Campos que quiero mostrar que pertenecen a Categoria
+                    attributes:['Nom_Categoria']
+                },
+                {
+                    model: Local,
+                    //Campos que quiero mostrar que pertenecen a Local
+                    attributes:['Nom_Local','Capacidad_Local']
+                }
+
+            ],
+            order: [['Id_Evento', 'ASC']] 
+        }
+    )
+
+
+    console.log(`Resultados en modelo:`)
+  /*  console.log(results);*/
+    return results.map(e=>(
+        {
+            Id_Evento: e.Id_Evento,
+            Nombre_Evento: e.Nombre_Evento,
+            Fecha_Evento: e.Fecha_Evento,
+            Nom_Categoria: e.tb_categorium?.Nom_Categoria, 
+            Nom_Local: e.tb_local?.Nom_Local,
+            Capacidad_Local: e.tb_local?.Capacidad_Local
+
+        }));
+
+    /*
     const [results, fields] = await orm.query( 
         `select E.Id_Evento,E.Nombre_Evento, E.Fecha_Evento,
                 C.Nom_Categoria, L.Nom_Local, L.Capacidad_Local 
@@ -145,6 +182,7 @@ export const getAll = async function () {
     console.log(`Resultados en modelo:`)
     console.log(results);
     return results;
+    */
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getById

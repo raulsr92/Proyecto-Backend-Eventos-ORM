@@ -30,7 +30,8 @@ export const Categoria = orm.define('tb_categoria',
     {
         //Options
         tableName: 'tb_categoria',
-        timestamps: false,
+        freezeTableName: true,
+        timestamps: false
     }
 )
 

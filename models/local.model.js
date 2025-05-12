@@ -52,7 +52,8 @@ export const Local = orm.define('tb_local',
     {
         //Options
         tableName: 'tb_local',
-        timestamps: false,
+        freezeTableName: true,
+        timestamps: false
     }
   
 )
