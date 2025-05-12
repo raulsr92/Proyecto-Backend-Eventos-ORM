@@ -2,14 +2,94 @@
 import orm from '../config/sequelize.js'
 
 //Importación de módulos
-
 import { Sequelize,DataTypes } from 'sequelize';
 
+//Importación de modelos relacionados (claves foráneas)
 
-export const connect = async function () {
-    await orm.authenticate();
+import { Local } from './local.model.js';
+import { Categoria } from './categoria.model.js';
 
-    console.log('La conexión ha sido establecida')
+
+//Definiendo modelo "Evento"
+
+export const Evento = orm.define('tb_evento',
+    {
+        Id_Evento:{
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            allowNull: false,
+            autoIncrement:true
+        },
+        Nombre_Evento:{
+            type: DataTypes.STRING(200),
+            allowNull: false,
+            validate: {
+                len: [1, 200] // Asegura que tenga entre 1 y 200 caracteres
+                }
+        },
+        Fecha_Evento:{
+            type: DataTypes.DATE,
+            validate:{
+                isDate: true,
+                isAfter: new Date().toISOString.split('T')[0] // Asegura que sea una fecha en el futuro
+            }
+        },
+        Hora_Evento:{
+            type: DataTypes.TIME,
+        },
+        Id_Cate:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate:{
+                isInt: true,
+                min:1
+            },
+            references:{
+                model: Categoria,
+                key: 'Id_Cate'
+            }
+        },
+        Id_Local:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate:{
+                isInt: true,
+                min:1
+            },
+            references:{
+                model: Local,
+                key: 'Id_Local'
+            }
+        },
+        Activo:{
+            type: DataTypes.STRING(5),
+            defaultValue: 'true',
+            validate:{
+                isIn: [['true', 'false']]
+            },
+            get() { // Convierte el valor a booleano al leerlo
+                return this.getDataValue('Activo') === 'true';
+            },
+             set(value) { // Convierte booleanos a string al guardarlos
+                this.setDataValue('Activo', value ? 'true' : 'false');
+            }
+        }
+    },
+    {
+        //Options
+        tableName: 'tb_evento',
+        timestamps: false,
+    })
+
+// f para establecer la conexión a la base de datos
+
+export const connect = async function() {
+    try {
+        await orm.authenticate();
+        console.log("Conexión establecida");
+    } catch (error) {
+        console.error("Error al conectar:", error);
+    }
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getAll

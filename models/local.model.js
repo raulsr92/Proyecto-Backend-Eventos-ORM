@@ -11,6 +11,7 @@ export const Local = orm.define('tb_local',
         Id_Local:{
             type: DataTypes.INTEGER,
             primaryKey: true,
+            allowNull: false,
             autoIncrement:true
         },
         Nom_Local:{
