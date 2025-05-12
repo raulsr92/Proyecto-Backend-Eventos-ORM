@@ -1,6 +1,10 @@
 //Importar configuración de conexión a la BD
 import orm from '../config/sequelize.js'
 
+//Importación de módulos
+
+import { Sequelize,DataTypes } from 'sequelize';
+
 
 export const connect = async function () {
     await orm.authenticate();
