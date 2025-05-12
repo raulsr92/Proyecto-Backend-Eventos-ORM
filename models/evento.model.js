@@ -66,12 +66,6 @@ export const Evento = orm.define('tb_evento',
             defaultValue: 'true',
             validate:{
                 isIn: [['true', 'false']]
-            },
-            get() { // Convierte el valor a booleano al leerlo
-                return this.getDataValue('Activo') === 'true';
-            },
-             set(value) { // Convierte booleanos a string al guardarlos
-                this.setDataValue('Activo', value ? 'true' : 'false');
             }
         }
     },
@@ -337,6 +331,25 @@ export const deleteRow = async function (activo,Id_Evento) {
  
     console.log("----------------------Model Delete (modificar activo false) Evento--------------------")
     
+        try {
+        const [updatedRows] = await Evento.update(
+            {
+                Activo: activo,         
+            },
+            {
+                where:{
+                    Id_Evento: Id_Evento
+                }
+            }
+        )
+        console.log(`Resultados en modelo:`)
+        console.log(`Filas afectadas: ${updatedRows}`);
+        return updatedRows;        
+    } catch (error) {
+        console.error("Error al actualizar evento:", error.message);
+        throw error;
+    }
+    /*
     const [results, fields] = await orm.query(
             `update tb_evento set Activo=?  where Id_Evento = ?`,
             {
@@ -346,4 +359,6 @@ export const deleteRow = async function (activo,Id_Evento) {
         console.log(`Resultados en modelo:`)
         console.log(`Filas afectadas: ${results.affectedRows}`);
         return results.affectedRows; 
+
+    */    
 }
