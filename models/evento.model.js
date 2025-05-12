@@ -2,7 +2,7 @@
 import orm from '../config/sequelize.js'
 
 //Importación de módulos
-import { Sequelize,DataTypes } from 'sequelize';
+import { Sequelize,DataTypes, where } from 'sequelize';
 
 //Importación de modelos relacionados (claves foráneas)
 
@@ -188,9 +188,43 @@ export const getAll = async function () {
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getById
 
 export const getById = async function (Id_Evento) {
- 
     console.log("----------------------Model para Listar por ID--------------------")
-    
+        const results = await Evento.findAll(
+        {
+            //Campos que quiero mostrar de la tabla Eventos
+            attributes: ['Id_Evento','Nombre_Evento','Fecha_Evento'],
+            include:
+            [
+                {
+                    model: Categoria,
+                    //Campos que quiero mostrar que pertenecen a Categoria
+                    attributes:['Nom_Categoria']
+                },
+                {
+                    model: Local,
+                    //Campos que quiero mostrar que pertenecen a Local
+                    attributes:['Nom_Local','Capacidad_Local']
+                }
+            ],
+            order: [['Id_Evento', 'ASC']],
+            where:{
+                Id_Evento: Id_Evento
+            }
+        }
+    )
+
+    console.log(`Resultados en modelo:`)
+  /*  console.log(results);*/
+    return results.map(e=>(
+        {
+            Id_Evento: e.Id_Evento,
+            Nombre_Evento: e.Nombre_Evento,
+            Fecha_Evento: e.Fecha_Evento,
+            Nom_Categoria: e.tb_categorium?.Nom_Categoria, 
+            Nom_Local: e.tb_local?.Nom_Local,
+            Capacidad_Local: e.tb_local?.Capacidad_Local
+        }));
+    /*
     const [results, fields] = await orm.query( 
         `select E.Id_Evento,E.Nombre_Evento, 
                 E.Fecha_Evento,C.Nom_Categoria, L.Nom_Local, L.Capacidad_Local 
@@ -206,6 +240,7 @@ export const getById = async function (Id_Evento) {
         )
     console.log(results);
     return results[0];
+    */
 }
 
 
