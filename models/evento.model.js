@@ -77,6 +77,7 @@ export const Evento = orm.define('tb_evento',
     },
     {
         //Options
+        freezeTableName: true,
         tableName: 'tb_evento',
         timestamps: false,
     })
@@ -91,6 +92,40 @@ export const connect = async function() {
         console.error("Error al conectar:", error);
     }
 }
+
+// Relaciones entre tablas (Associations)
+
+// ============> Entre tabla Evento y Local
+
+Local.hasMany(
+    Evento,
+    {
+        foreignKey: 'Id_Local'
+    }
+);
+
+Evento.belongsTo(
+    Local,
+    {
+        foreignKey: 'Id_Local'
+    }
+)
+
+// ============> Entre tabla Evento y Categoría
+
+Categoria.hasMany(
+    Evento,
+    {
+        foreignKey: 'Id_Cate'
+    }
+);
+
+Evento.belongsTo(
+    Categoria,
+    {
+        foreignKey: 'Id_Cate'
+    }
+)
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getAll
 
