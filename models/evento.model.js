@@ -292,7 +292,29 @@ export const create = async function (objEvento) {
 export const update = async function (Id_Evento, objEvento) {
  
     console.log("----------------------Model Modificar Evento--------------------")
-    
+    try {
+        const [updatedRows] = await Evento.update(
+            {
+                Nombre_Evento: objEvento.Nombre_Evento,
+                Fecha_Evento: objEvento.Fecha_Evento,
+                Hora_Evento: objEvento.Hora_Evento,
+                Id_Cate: objEvento.Id_Cate,
+                Id_Local:objEvento.Id_Local            
+            },
+            {
+                where:{
+                    Id_Evento: Id_Evento
+                }
+            }
+        )
+        console.log(`Resultados en modelo:`)
+        console.log(`Filas afectadas: ${updatedRows}`);
+        return updatedRows;        
+    } catch (error) {
+        console.error("Error al actualizar evento:", error.message);
+        throw error;
+    }
+    /*
     const [results, fields] = await orm.query( 
             `update tb_evento 
              set Nombre_Evento = ?, Fecha_Evento = ?, Hora_Evento=?,Id_Cate =?,Id_Local=?,Activo=? 
@@ -305,7 +327,8 @@ export const update = async function (Id_Evento, objEvento) {
              
         console.log(`Resultados en modelo:`)
         console.log(`Filas afectadas: ${results.affectedRows}`);
-        return results.affectedRows;      
+        return results.affectedRows;  
+    */    
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
