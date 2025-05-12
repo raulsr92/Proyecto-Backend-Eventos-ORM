@@ -250,6 +250,28 @@ export const create = async function (objEvento) {
  
     console.log("----------------------Model Insertar nuevo Evento--------------------")
     
+    try {
+            const evento = await Evento.create(
+        {
+            Nombre_Evento: objEvento.Nombre_Evento,
+            Fecha_Evento: objEvento.Fecha_Evento,
+            Hora_Evento: objEvento.Hora_Evento,
+            Id_Cate: objEvento.Id_Cate,
+            Id_Local:objEvento.Id_Local
+        });
+
+        console.log(`Resultados en modelo:`)
+        console.log(evento)
+        console.log(`ID de Evento Insertado:`)
+        console.log(evento.toJSON().Id_Evento)
+
+        return evento.toJSON().Id_Evento;
+
+    } catch (error) {
+        console.error("Error al insertar evento:", error.message);
+        throw error;
+    }
+    /*
     const [results, metadata] = await orm.query( 
             `INSERT INTO tb_evento (Nombre_Evento,Fecha_Evento,Hora_Evento, Id_Cate, Id_Local) 
             VALUES (?, ?,?, ?,?)`,
@@ -262,6 +284,7 @@ export const create = async function (objEvento) {
     console.log(`Resultados en modelo:`)
     console.log(results);
     return results;
+    */
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
