@@ -1,7 +1,6 @@
 // Importación de paquetes y archivos
 
 import * as seventos from '../services/eventos.service.js'
-import * as sfile from '../services/file.service.js'
 
 
 // Array de los Eventos
@@ -138,7 +137,6 @@ export const deleteRow = async function(req, res){
         res.status(500).json({"error":"Error eliminando registros"});
     }
 }
-
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método upload
 
 export const upload = async function(req, res){
