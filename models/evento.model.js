@@ -67,6 +67,13 @@ export const Evento = orm.define('tb_evento',
             validate:{
                 isIn: [['true', 'false']]
             }
+        },
+        archivo:{
+            type: DataTypes.STRING,
+            allowNull: true,
+            validate: {
+                len: [1, 100],
+            }
         }
     },
     {
@@ -130,7 +137,7 @@ export const getAll = async function () {
     const results = await Evento.findAll(
         {
             //Campos que quiero mostrar de la tabla Eventos
-            attributes: ['Id_Evento','Nombre_Evento','Fecha_Evento'],
+            attributes: ['Id_Evento','Nombre_Evento','Fecha_Evento','archivo'],
             include:
             [
                 {
@@ -159,8 +166,8 @@ export const getAll = async function () {
             Fecha_Evento: e.Fecha_Evento,
             Nom_Categoria: e.tb_categorium?.Nom_Categoria, 
             Nom_Local: e.tb_local?.Nom_Local,
-            Capacidad_Local: e.tb_local?.Capacidad_Local
-
+            Capacidad_Local: e.tb_local?.Capacidad_Local,
+            archivo:e.archivo
         }));
 
     /*
@@ -186,7 +193,7 @@ export const getById = async function (Id_Evento) {
         const results = await Evento.findAll(
         {
             //Campos que quiero mostrar de la tabla Eventos
-            attributes: ['Id_Evento','Nombre_Evento','Fecha_Evento'],
+            attributes: ['Id_Evento','Nombre_Evento','Fecha_Evento','archivo'],
             include:
             [
                 {
@@ -216,7 +223,8 @@ export const getById = async function (Id_Evento) {
             Fecha_Evento: e.Fecha_Evento,
             Nom_Categoria: e.tb_categorium?.Nom_Categoria, 
             Nom_Local: e.tb_local?.Nom_Local,
-            Capacidad_Local: e.tb_local?.Capacidad_Local
+            Capacidad_Local: e.tb_local?.Capacidad_Local,
+            archivo:e.archivo
         }));
     /*
     const [results, fields] = await orm.query( 
@@ -377,11 +385,11 @@ export const updateArchivo = async function(Id_Evento, filename) {
                 Id_Evento: Id_Evento
             }
         });
-        console.log(updatedRows);
+        console.log(`Resultados en modelo:`)
+        console.log(`Filas afectadas: ${updatedRows}`);
         return updatedRows;
     }catch(error){
-        console.log("excepcion...");
-        console.log(error);
+        console.error("Error al cargar archivo:", error.message);
         throw error;
     }
 };
