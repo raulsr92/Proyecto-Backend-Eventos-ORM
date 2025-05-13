@@ -10,7 +10,7 @@ const pool = _mysql.createPool(
     {
         host: 'localhost',
         user: 'root',
-        password: 'RavL92$An60#',
+        password: '',
         database: 'eventosdb',
         waitForConnections: true,
         connectionLimit: 2,
