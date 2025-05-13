@@ -85,6 +85,6 @@ export const downloadArchivo = async function (Id_Evento) {
     
     const results = await modelEvento.getById(Id_Evento);
     
-    console.log("luego del modelAutomovil: "+results[0].archivo);
+    console.log("luego del model Evento: "+results[0].archivo);
     return archivos.getArchivo(results[0].archivo)
 }

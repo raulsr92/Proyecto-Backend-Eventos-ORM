@@ -376,7 +376,7 @@ export const deleteRow = async function (activo,Id_Evento) {
 
 export const updateArchivo = async function(Id_Evento, filename) {
     try{
-        const [updatedRows]= await Automovil.update(
+        const [updatedRows]= await Evento.update(
         {
             archivo:filename
         },
