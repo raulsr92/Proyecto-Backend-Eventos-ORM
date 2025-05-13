@@ -29,6 +29,8 @@ app.use("/api/v1", api)
 
 //await orm.sync({});
 
+//listar archivos en la web
+app.use(express.static('uploads'));
 
 // Inicializar el servidor
 
