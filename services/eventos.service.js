@@ -4,6 +4,7 @@ import pool from '../config/db.js'
 
 //Importar el modelo de eventos (sequelize)
 import * as modelEvento from '../models/evento.model.js'
+import * as archivos from '../utils/archivos.js'
 
 // Crear funciones
 
@@ -74,4 +75,16 @@ export const deleteRow = async function (activo,Id_Evento) {
     console.log(`Resultados en servicio:`)
     console.log(`Filas afectadas: ${filasAfectadas}`);
     return filasAfectadas;  
+}
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método download archivo
+
+export const downloadArchivo = async function (Id_Evento) {
+ 
+    console.log("----------------------Service para Descargar--------------------")
+    
+    const results = await modelEvento.getById(Id_Evento);
+    
+    console.log("luego del modelAutomovil: "+results[0].archivo);
+    return archivos.getArchivo(results[0].archivo)
 }

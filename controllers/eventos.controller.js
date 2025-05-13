@@ -1,6 +1,7 @@
 // Importación de paquetes y archivos
 
 import * as seventos from '../services/eventos.service.js'
+import * as sfile from '../services/file.service.js'
 
 
 // Array de los Eventos
@@ -135,5 +136,54 @@ export const deleteRow = async function(req, res){
         
     } catch (error) {
         res.status(500).json({"error":"Error eliminando registros"});
+    }
+}
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método upload
+
+export const upload = async function(req, res){
+
+    console.log("------------controller upload files ------------");
+
+    try {
+        // Lo que se recibe por parte del usuario:
+            const objEvento = req.body
+            console.log(`Enviado por user: `)
+            console.log(objEvento)
+
+            sfile.uploadEvento(req,res);
+            console.log("response luego de upload");
+
+    } catch (error) {
+            res.status(500).json({"error":"Error cargando archivos"});
+    }
+}
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método download
+
+export const download = async function(req, res){
+
+    console.log("------------controller download files ------------");
+    console.log("req.params.id: "+req.params.id);
+
+    try {
+
+        let rutaArchivo = await seventos.downloadArchivo(req.params.id);
+        console.log("... despues de scatalogo.downloadArchivo()");
+        if (fs.existsSync(rutaArchivo)) {
+            // Configurar headers
+            res.download(rutaArchivo, 'imagen.jpg', (err) => {
+                if (err) {
+                    console.error('Error al descargar:', err);
+                    res.status(500).send({"error":'Error al descargar el archivo'});
+                }
+            });
+        } else {
+            res.status(404).send({"error":'Archivo no encontrado'});
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({"error":"Error obteniendo registros"});
     }
 }
