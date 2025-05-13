@@ -4,92 +4,72 @@ import * as susuarios from '../services/usuarios.service.js'
 
 // Funciones exportables
 
-// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getAll
+//  Método getAll
 
-export const getAll = function (req, res) {
-
+export const getAll = async function (req, res) {
     console.log("------------controller------------");
-    susuarios.getAll()
-    .then( usuarios =>{
-            console.log("....despues de susuarios.getAll()");
-            res.json(usuarios || [] )
-    })
-    .catch(
-        err => {
-            res.status(500).json({"error":"Error obteniendo registros"});
-        }
-    )
-}
 
-// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getById
+    try {
+        const usuarios = await susuarios.getAll();
+        console.log("....despues de susuarios.getAll()");
+        res.json(usuarios || []);
+    } catch (err) {
+        res.status(500).json({ error: "Error obteniendo registros" });
+    }
+};
 
-export const getById = function (req, res) {
+// Método getById
+
+export const getById = async function (req, res) {
     console.log("------------controller------------");
-    susuarios.getById(req.params.id)
-    .then( objUsuarios =>{
-            console.log("....despues de susuarios.getById()");
 
-            res.json(objUsuarios || [] )
-    })
-    .catch(
-        err => {
-            res.status(500).json({"error":"Error obteniendo registros"});
-        }
-    )
-}
+    try {
+        const objUsuarios = await susuarios.getById(req.params.id);
+        console.log("....despues de susuarios.getById()");
+        res.json(objUsuarios || []);
+    } catch (err) {
+        res.status(500).json({ error: "Error obteniendo registros" });
+    }
+};
 
-// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método create
+//  Método create
 
-export const create = function(req, res){
+export const create = async function (req, res) {
+    const objUser = req.body;
+    console.log(objUser);
 
-    const objUser = req.body
-    console.log(objUser)
-    susuarios.create(objUser)
-    .then( idUsuario =>{
+    try {
+        const idUsuario = await susuarios.create(objUser);
         console.log("....despues de susuarios.create()");
-        res.json({"Id de usuario creado en BD":idUsuario});
-        })
-    .catch(
-        err => {
-        res.status(500).json({"error":"Error ingresando registros"});
+        res.json({ "Id de usuario creado en BD": idUsuario });
+    } catch (err) {
+        res.status(500).json({ error: "Error ingresando registros" });
     }
-)
-}
+};
 
-// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
+// Método update
 
-export const update = function(req, res){
+export const update = async function (req, res) {
+    const objUser = req.body;
+    console.log(objUser);
 
-    const objUser = req.body
-    console.log(objUser)
-    susuarios.update(req.params.id,objUser)
-    .then( NumRegistros =>{
+    try {
+        const NumRegistros = await susuarios.update(req.params.id, objUser);
         console.log("....despues de susuarios.update()");
-        res.json({"NumeroRegistrosModificados":NumRegistros});
-
-        })
-    .catch(
-        err => {
-        res.status(500).json({"error":"Error actualizando registros"});
+        res.json({ "NumeroRegistrosModificados": NumRegistros });
+    } catch (err) {
+        res.status(500).json({ error: "Error actualizando registros" });
     }
-)
-}
+};
 
-// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
+// Método delete
 
-
-export const deleteRow = function(req, res){
-
-    susuarios.deleteRow(req.params.id)
-    .then( NumRegistros =>{
-
+export const deleteRow = async function (req, res) {
+    try {
+        const NumRegistros = await susuarios.deleteRow(req.params.id);
         console.log("....despues de susuarios.deleteRow()");
-        res.json({"NumeroRegistrosModificados":NumRegistros});
-
-        })
-    .catch(
-        err => {
-        res.status(500).json({"error":"Error eliminando registros"});
+        res.json({ "NumeroRegistrosModificados": NumRegistros });
+    } catch (err) {
+        res.status(500).json({ error: "Error eliminando registros" });
     }
-)
-}
+};

@@ -6,7 +6,7 @@ import Sequelize from 'sequelize';
 const orm = new Sequelize(
     'eventosdb',
     'root',
-    'RavL92$An60#',
+    '',
     {
         host:'localhost',
         dialect:'mysql'
