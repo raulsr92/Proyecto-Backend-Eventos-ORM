@@ -362,3 +362,26 @@ export const deleteRow = async function (activo,Id_Evento) {
 
     */    
 }
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update archivo
+
+
+export const updateArchivo = async function(Id_Evento, filename) {
+    try{
+        const [updatedRows]= await Automovil.update(
+        {
+            archivo:filename
+        },
+        {
+            where:{
+                Id_Evento: Id_Evento
+            }
+        });
+        console.log(updatedRows);
+        return updatedRows;
+    }catch(error){
+        console.log("excepcion...");
+        console.log(error);
+        throw error;
+    }
+};

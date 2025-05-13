@@ -8,6 +8,9 @@ import cors from './config/cors.js'
 import PUERTO from './utils/constantes.js'
 import api from './routes.js'
 import dotenv from 'dotenv';
+
+//Importar configuración de conexión a la BD
+import orm from './config/sequelize.js'
 // Instancias
 
 const app = express();
@@ -22,6 +25,10 @@ dotenv.config();
 //Endpoint principal...
 
 app.use("/api/v1", api)
+
+
+//await orm.sync({});
+
 
 // Inicializar el servidor
 
