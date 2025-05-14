@@ -6,12 +6,11 @@ import pool from '../config/db.js'
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getAll
 
-export const getAll = function () {
+export const getAll = async function () {
  
     console.log("----------------------Service Getting all usuers--------------------")
     
-    return new Promise( (resolve, reject) =>{
-        pool.query( 
+    const [results, fields] = await pool.query( 
             `
             select 
 	            id_usuario,
@@ -26,26 +25,20 @@ export const getAll = function () {
 	        end as Activo
 
             from tb_usuario
-            `,(err, results, fields)=>{
-            console.log(results);
-            if(err){
-                reject(err)
-            } else{
-                resolve(results)
-            }
-        })
-    }
-    )
+            `)
+
+    console.log(`Resultados en servicio:`)
+    console.log(results);
+    return results; 
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getById
 
-export const getById = function (Id_Usuario) {
+export const getById = async function (Id_Usuario) {
  
     console.log("----------------------Service para Listar por ID--------------------")
     
-    return new Promise( (resolve, reject) =>{
-        pool.query( 
+    const [results, fields] = await pool.query( 
             ` select 
                 id_usuario,
                 nom_usuario,
@@ -60,83 +53,75 @@ export const getById = function (Id_Usuario) {
                 from
                     tb_usuario where id_usuario = ?      
             
-            `,[Id_Usuario],(err, results, fields)=>{
-            console.log(results);
-            if(err){
-                reject(err)
-            } else{
-                resolve(results[0])
-            }
-        })
-    }
-    )
+            `,[Id_Usuario])
+
+    console.log(`Resultados en servicio:`)
+    console.log(results);
+    console.log(results[0]);
+    return results[0];  
+
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método create
 
-export const create = function (objUser) {
+export const create = async function (objUser) {
  
-    console.log("----------------------Service Insertar nuevo Evento--------------------")
-    
-    return new Promise( (resolve, reject) =>{
-        pool.query( 
+    console.log("----------------------Service Insertar nuevo Usuario--------------------")
+
+    const [results, fields] = await pool.query( 
             `
-            INSERT INTO tb_usuario (nom_usuario, ape_usuario, correo_usuario, pass_usuario, tipo_doc_usuario,nro_doc_usuario, pais_usuario,ubigeo,cod_telef_usuario,telef_usuario,fingreso_usuario,num_errores_usuario,Activo)
-			VALUES (?,?,?,?,?,?,?,?,?,?,1,0,1)
-            `,[objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,objUser.tipo_doc_usuario,objUser.nro_doc_usuario,objUser.pais_usuario,objUser.ubigeo,objUser.cod_telef_usuario,objUser.telef_usuario],(err, results, fields)=>{
+            INSERT INTO tb_usuario (nom_usuario, ape_usuario, correo_usuario, pass_usuario, tipo_doc_usuario,nro_doc_usuario, pais_usuario,ubigeo,cod_telef_usuario,telef_usuario,fingreso_usuario,num_errores_usuario,Activo, rol_usuario)
+			VALUES (?,?,?,?,?,?,?,?,?,?,1,0,1,?)
+            `,[objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,objUser.tipo_doc_usuario,objUser.nro_doc_usuario,objUser.pais_usuario,objUser.ubigeo,objUser.cod_telef_usuario,objUser.telef_usuario,objUser.rol_usuario])
+            
+            console.log(`Resultados en servicio:`)
             console.log(results);
-            if(err){
-                reject(err)
-            } else{
-                resolve(results.insertId)
-            }
-        })
-    }
-    )
+
+            console.log(`Id de usuario Insertado:`)
+            console.log(results.insertId);
+
+            return results.insertId; 
 }
 
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
 
-export const update = function (id_usuario, objUser) {
+export const update = async function (id_usuario, objUser) {
  
     console.log("----------------------Service Modificar Usuario--------------------")
     
-    return new Promise( (resolve, reject) =>{
-        pool.query(
+    const [results, fields] = await pool.query(
             `
-            update tb_usuario set nom_usuario = ?, ape_usuario = ? ,correo_usuario= ?, pass_usuario=?, ubigeo=?, telef_usuario=? where  id_usuario = ?;
+            update tb_usuario set nom_usuario = ?, ape_usuario = ? ,correo_usuario= ?, pass_usuario=?, ubigeo=?, telef_usuario=?, rol_usuario=? where  id_usuario = ?;
             `
             ,
-            [objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,objUser.ubigeo,objUser.telef_usuario,id_usuario]
-            ,(err, results, fields)=>{
+            [objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,
+             objUser.ubigeo,objUser.telef_usuario,objUser.rol_usuario,id_usuario])
+
+            console.log(`Resultados en servicio:`)
             console.log(results);
-            if(err){
-                reject(err)
-            } else{
-                resolve(results.affectedRows)
-            }
-        })
-    }
-    )
+
+            console.log(`Id de filas modificadas:`)
+            console.log(results.affectedRows);
+
+            return results.affectedRows; 
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
 
-export const deleteRow = function (Id_Usuario) {
+export const deleteRow = async function (Id_Usuario) {
  
     console.log("----------------------Service Desactivar usuario--------------------")
     
-    return new Promise( (resolve, reject) =>{
-        pool.query( 'update tb_usuario set Activo=0  where id_usuario = ?',
-                    [Id_Usuario],(err, results, fields)=>{
-            console.log(results);
-            if(err){
-                reject(err)
-            } else{
-                resolve(results.affectedRows)
-            }
-        })
-    }
-    )
+    const [results, fields] = await pool.query(
+         'update tb_usuario set Activo=0  where id_usuario = ?',
+                    [Id_Usuario])
+
+    console.log(`Resultados en servicio:`)
+    console.log(results);
+
+    console.log(`Id de filas modificadas:`)
+    console.log(results.affectedRows);
+
+    return results.affectedRows;            
 }
