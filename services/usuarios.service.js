@@ -1,6 +1,11 @@
 //Importar pool de conexiones
-
 import pool from '../config/db.js'
+
+//Importar el modelo de usuarios (sequelize)
+
+import * as modelUsuario from '../models/usuario.model.js'
+
+
 
 // Crear funciones
 
