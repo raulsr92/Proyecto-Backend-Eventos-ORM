@@ -2,7 +2,7 @@
 import orm from '../config/sequelize.js'
 
 //Importación de módulos
-import { Sequelize,DataTypes, where } from 'sequelize';
+import { Sequelize,DataTypes, } from 'sequelize';
 
 //Importación de modelos relacionados (claves foráneas)
 

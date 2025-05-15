@@ -1,6 +1,131 @@
 //Importar configuración de conexión a la BD
 import orm from '../config/sequelize.js'
 
+//Importación de módulos
+import { Sequelize,DataTypes, } from 'sequelize';
+
+//Definiendo modelo "Usuario"
+
+export const Usuario = orm.define('tb_usuario',
+    {
+        id_usuario:{
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            allowNull: false,
+            autoIncrement:true
+        },
+        nom_usuario:{
+            type: DataTypes.STRING(150),
+            allowNull: false,
+            //Establecer longitud
+            validate: {
+                len: [1, 150],
+            }   
+        },
+        ape_usuario:{
+            type: DataTypes.STRING(180),
+            allowNull: false,
+            //Establecer longitud
+            validate: {
+                len: [1, 180],
+            }   
+        },
+        correo_usuario:{
+            type: DataTypes.STRING(120),
+            allowNull: false,
+            unique:true,
+            validate:{
+                isEmail: true,
+            }
+
+        },
+        pass_usuario:{
+            type: DataTypes.STRING(20),
+            allowNull: false,
+            validate:{
+                min:8,
+                len: [8, 20],
+                is: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/ // Al menos una mayúscula, una minúscula, un número y un caracter especial
+            }
+        },
+        tipo_doc_usuario:{
+            type: DataTypes.STRING(100),
+            allowNull:false,
+            isIn: [['DNI', 'Pasaporte','Carnet de Extranjería' ]],  
+        },
+        nro_doc_usuario:{
+            type: DataTypes.STRING(12),
+            allowNull:false,
+            validate:{
+                isNumeric:true,
+                len: [8, 12]
+            }
+        },   
+        pais_usuario:{
+            type: DataTypes.STRING(100),
+            allowNull:false,
+        }, 
+        ubigeo:{
+            type: DataTypes.STRING(6),
+            allowNull: false,
+            validate: {
+                len: [6, 6],
+                is: /^[0-9]{6}$/
+            },
+        }, 
+        cod_telef_usuario:{
+            type: DataTypes.STRING(50),
+            allowNull: false
+        }, 
+        telef_usuario:{
+            type: DataTypes.STRING(20),
+            allowNull: false,
+            validate:{
+                isNumeric:true,
+                len: [7, 20]
+            }
+        },  
+        fingreso_usuario:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate:{
+                isIn: [[0,1]]
+            }
+        },  
+        num_errores_usuarios:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate:{
+                min:0,
+                isInt:true
+            }
+
+        },  
+        otp_usuario:{
+            type: DataTypes.STRING(20),
+            allowNull: false
+        },  
+        Activo:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 1,
+            validate:{
+                isIn: [[0, 1]]
+            }
+        },   
+        rol_usuario:{
+            type: DataTypes.STRING(60),
+            allowNull: false,
+            validate:{
+                isIn: [['administrador', 'user','backend','frontend']],  
+                min:60
+            }
+        },     
+    }
+
+    ,'options')
+
+
 
 // f para establecer la conexión a la base de datos
 
