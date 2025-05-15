@@ -87,14 +87,16 @@ export const Usuario = orm.define('tb_usuario',
         },  
         fingreso_usuario:{
             type: DataTypes.INTEGER,
+            defaultValue: 1,
             allowNull: false,
             validate:{
                 isIn: [[0,1]]
             }
         },  
-        num_errores_usuarios:{
+        num_errores_usuario:{
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 0,
             validate:{
                 min:0,
                 isInt:true
@@ -103,7 +105,6 @@ export const Usuario = orm.define('tb_usuario',
         },  
         otp_usuario:{
             type: DataTypes.STRING(20),
-            allowNull: false
         },  
         Activo:{
             type: DataTypes.INTEGER,
@@ -174,31 +175,27 @@ export const getById = async function (Id_Usuario) {
  
     console.log("----------------------Model para Listar por ID--------------------")
     
-    const [results, fields] = await orm.query( 
-            ` select 
-                id_usuario,
-                nom_usuario,
-                ape_usuario,
-                correo_usuario,
-                cod_telef_usuario,
-                telef_usuario,  
-                case 
-                    when Activo = 1 then 'Usuario Activo'
-                    when Activo = 0 then 'Usuario Inactivo'
-                end as Activo
-                from
-                    tb_usuario where id_usuario = ?
-            `,
-            {
-                replacements:[Id_Usuario]
+    const users =  await Usuario.findAll(
+        {
+            //Campos que quiero mostrar de la tabla Usuarios
+            attributes: ['id_usuario','nom_usuario','ape_usuario','correo_usuario',
+                'cod_telef_usuario','telef_usuario','rol_usuario',
+                [Sequelize.literal(
+                    `CASE 
+                        WHEN Activo = 1 THEN 'Usuario Activo' 
+                        WHEN Activo = 0 THEN 'Usuario Inactivo' 
+                    END`
+                ),'Activo']
+            ],
+            where:{
+                id_usuario: Id_Usuario
             }
-           )
-
+        }
+    )
     console.log(`Resultados en modelo:`)
-    console.log(results);
-    console.log(results[0]);
-    return results;  
-
+    console.log(users);
+    console.log(users[0]);
+    return users;  
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método create
@@ -207,22 +204,32 @@ export const create = async function (objUser) {
  
     console.log("----------------------Modelo Insertar nuevo Usuario--------------------")
 
-    const [results, fields] = await orm.query( 
-            `
-            INSERT INTO tb_usuario (nom_usuario, ape_usuario, correo_usuario, pass_usuario, tipo_doc_usuario,nro_doc_usuario, pais_usuario,ubigeo,cod_telef_usuario,telef_usuario,fingreso_usuario,num_errores_usuario,Activo, rol_usuario)
-			VALUES (?,?,?,?,?,?,?,?,?,?,1,0,1,?)
-            `,
+    try {
+        const user = await Usuario.create(
             {
-                replacements:[objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,objUser.tipo_doc_usuario,objUser.nro_doc_usuario,objUser.pais_usuario,objUser.ubigeo,objUser.cod_telef_usuario,objUser.telef_usuario,objUser.rol_usuario]
+                nom_usuario:objUser.nom_usuario,
+                ape_usuario:objUser.ape_usuario,
+                correo_usuario:objUser.correo_usuario,
+                pass_usuario:objUser.pass_usuario,
+                tipo_doc_usuario:objUser.tipo_doc_usuario,
+                nro_doc_usuario: objUser.nro_doc_usuario,
+                pais_usuario:objUser.pais_usuario,
+                ubigeo: objUser.ubigeo,
+                cod_telef_usuario: objUser.cod_telef_usuario,
+                telef_usuario:objUser.telef_usuario,
+                rol_usuario:objUser.rol_usuario
             }
-            );
-            
+        )
             console.log(`Resultados en modelo:`)
-            console.log(results);
-
-          
-
-            return results; 
+            console.log(user);
+            console.log(`ID de Usuario creado:`)
+            console.log(user.toJSON().id_usuario);
+            return user.toJSON().id_usuario; 
+        
+    } catch (error) {
+        console.error("Error al insertar evento:", error.message);
+        throw error;
+    }
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
