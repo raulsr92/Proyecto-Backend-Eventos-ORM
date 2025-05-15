@@ -73,3 +73,27 @@ export const getById = async function (Id_Usuario) {
     return results;  
 
 }
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método create
+
+export const create = async function (objUser) {
+ 
+    console.log("----------------------Modelo Insertar nuevo Usuario--------------------")
+
+    const [results, fields] = await orm.query( 
+            `
+            INSERT INTO tb_usuario (nom_usuario, ape_usuario, correo_usuario, pass_usuario, tipo_doc_usuario,nro_doc_usuario, pais_usuario,ubigeo,cod_telef_usuario,telef_usuario,fingreso_usuario,num_errores_usuario,Activo, rol_usuario)
+			VALUES (?,?,?,?,?,?,?,?,?,?,1,0,1,?)
+            `,
+            {
+                replacements:[objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,objUser.tipo_doc_usuario,objUser.nro_doc_usuario,objUser.pais_usuario,objUser.ubigeo,objUser.cod_telef_usuario,objUser.telef_usuario,objUser.rol_usuario]
+            }
+            );
+            
+            console.log(`Resultados en modelo:`)
+            console.log(results);
+
+          
+
+            return results; 
+}

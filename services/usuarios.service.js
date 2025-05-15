@@ -43,19 +43,12 @@ export const create = async function (objUser) {
  
     console.log("----------------------Service Insertar nuevo Usuario--------------------")
 
-    const [results, fields] = await pool.query( 
-            `
-            INSERT INTO tb_usuario (nom_usuario, ape_usuario, correo_usuario, pass_usuario, tipo_doc_usuario,nro_doc_usuario, pais_usuario,ubigeo,cod_telef_usuario,telef_usuario,fingreso_usuario,num_errores_usuario,Activo, rol_usuario)
-			VALUES (?,?,?,?,?,?,?,?,?,?,1,0,1,?)
-            `,[objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,objUser.tipo_doc_usuario,objUser.nro_doc_usuario,objUser.pais_usuario,objUser.ubigeo,objUser.cod_telef_usuario,objUser.telef_usuario,objUser.rol_usuario])
-            
-            console.log(`Resultados en servicio:`)
-            console.log(results);
+    let idUsuarioCreado = await modelUsuario.create(objUser);
 
-            console.log(`Id de usuario Insertado:`)
-            console.log(results.insertId);
+    console.log(`Id de usuario Insertado:`)
+    console.log(idUsuarioCreado);
 
-            return results.insertId; 
+    return idUsuarioCreado; 
 }
 
 
