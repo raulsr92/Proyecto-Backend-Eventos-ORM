@@ -121,9 +121,14 @@ export const Usuario = orm.define('tb_usuario',
                 min:60
             }
         },     
+    },
+    {
+        //Options
+        freezeTableName: true,
+        tableName: 'tb_usuario',
+        timestamps: false,
     }
-
-    ,'options')
+)
 
 
 
@@ -143,27 +148,24 @@ export const connect = async function() {
 export const getAll = async function () {
  
     console.log("----------------------Model Getting all usuers--------------------")
-    
-    const [results, fields] = await orm.query( 
-            `
-            select 
-	            id_usuario,
-	            nom_usuario,
-	            ape_usuario,
-	            correo_usuario,
-	            cod_telef_usuario,
-	            telef_usuario,
-	        case 
-		        when Activo = 1 then 'Usuario Activo'
-		        when Activo = 0 then 'Usuario Inactivo'
-	        end as Activo
 
-            from tb_usuario
-            `)
-
+    const users =  await Usuario.findAll(
+        {
+            //Campos que quiero mostrar de la tabla Usuarios
+            attributes: ['id_usuario','nom_usuario','ape_usuario','correo_usuario',
+                'cod_telef_usuario','telef_usuario','rol_usuario',
+                [Sequelize.literal(
+                    `CASE 
+                        WHEN Activo = 1 THEN 'Usuario Activo' 
+                        WHEN Activo = 0 THEN 'Usuario Inactivo' 
+                    END`
+                ),'Activo']
+            ],
+        }
+    )
     console.log(`Resultados en modelo:`)
-    console.log(results);
-    return results; 
+    console.log(users);
+    return users; 
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método getById
