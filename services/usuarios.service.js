@@ -57,22 +57,14 @@ export const create = async function (objUser) {
 export const update = async function (id_usuario, objUser) {
  
     console.log("----------------------Service Modificar Usuario--------------------")
+
+    const filasAfectadas = await modelUsuario.update(id_usuario,objUser);
     
-    const [results, fields] = await pool.query(
-            `
-            update tb_usuario set nom_usuario = ?, ape_usuario = ? ,correo_usuario= ?, pass_usuario=?, ubigeo=?, telef_usuario=?, rol_usuario=? where  id_usuario = ?;
-            `
-            ,
-            [objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,
-             objUser.ubigeo,objUser.telef_usuario,objUser.rol_usuario,id_usuario])
+    console.log(`Resultados en servicio:`)
 
-            console.log(`Resultados en servicio:`)
-            console.log(results);
+    console.log(`Id de filas modificadas: ${filasAfectadas}`)
 
-            console.log(`Id de filas modificadas:`)
-            console.log(results.affectedRows);
-
-            return results.affectedRows; 
+    return filasAfectadas; 
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
@@ -81,15 +73,12 @@ export const deleteRow = async function (Id_Usuario) {
  
     console.log("----------------------Service Desactivar usuario--------------------")
     
-    const [results, fields] = await pool.query(
-         'update tb_usuario set Activo=0  where id_usuario = ?',
-                    [Id_Usuario])
+    const filasAfectadas = await modelUsuario.deleteRow(Id_Usuario)
+
 
     console.log(`Resultados en servicio:`)
-    console.log(results);
 
-    console.log(`Id de filas modificadas:`)
-    console.log(results.affectedRows);
+    console.log(`Id de filas modificadas: ${filasAfectadas}`)
 
-    return results.affectedRows;            
+    return filasAfectadas;            
 }

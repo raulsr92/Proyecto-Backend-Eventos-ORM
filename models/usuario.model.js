@@ -97,3 +97,51 @@ export const create = async function (objUser) {
 
             return results; 
 }
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
+
+export const update = async function (id_usuario, objUser) {
+ 
+    console.log("----------------------Modelo Modificar Usuario--------------------")
+    
+    const [results, fields] = await orm.query(
+            `
+            update tb_usuario set nom_usuario = ?, ape_usuario = ? ,correo_usuario= ?, pass_usuario=?, ubigeo=?, telef_usuario=?, rol_usuario=? where  id_usuario = ?;
+            `
+            ,
+            {
+                replacements: [objUser.nom_usuario,objUser.ape_usuario,objUser.correo_usuario,objUser.pass_usuario,
+             objUser.ubigeo,objUser.telef_usuario,objUser.rol_usuario,id_usuario]
+            }
+            )
+
+            console.log(`Resultados en modelo:`)
+            console.log(results);
+
+            console.log(`Id de filas modificadas:`)
+            console.log(results.affectedRows);
+
+            return results.affectedRows; 
+}
+
+// ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método delete
+
+export const deleteRow = async function (Id_Usuario) {
+ 
+    console.log("----------------------Service Desactivar usuario--------------------")
+    
+    const [results, fields] = await orm.query(
+         'update tb_usuario set Activo=0  where id_usuario = ?',
+         {
+            replacements:[Id_Usuario]
+         }
+        )
+
+    console.log(`Resultados en modelo:`)
+    console.log(results);
+
+    console.log(`Id de filas modificadas:`)
+    console.log(results.affectedRows);
+
+    return results.affectedRows;            
+}
