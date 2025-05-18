@@ -31,3 +31,14 @@ export const MedioPago = orm.define('tb_mediopago',
 
     }
 )
+
+// f para establecer la conexión a la base de datos
+
+export const connect = async function() {
+    try {
+        await orm.authenticate();
+        console.log("Conexión establecida");
+    } catch (error) {
+        console.error("Error al conectar:", error);
+    }
+}
