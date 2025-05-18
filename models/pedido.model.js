@@ -79,6 +79,56 @@ export const Pedido = orm.define('tb_pedido',
     }
 )
 
+// Relaciones entre tablas (Associations)
+
+// ============> Entre tabla Pedido y Medio de Pago
+
+MedioPago.hasMany(
+    Pedido,
+    {
+        foreignKey: 'id_mediopago'
+    }
+);
+
+Pedido.belongsTo(
+    MedioPago,
+    {
+        foreignKey: 'id_mediopago'
+    }
+)
+
+// ============> Entre tabla Pedido y Usuario
+
+Usuario.hasMany(
+    Pedido,
+    {
+        foreignKey: 'id_usuario'
+    }
+);
+
+Pedido.belongsTo(
+    Usuario,
+    {
+        foreignKey: 'id_usuario'
+    }
+)
+
+// ============> Entre tabla Pedido y Evento
+
+Evento.hasMany(
+    Pedido,
+    {
+        foreignKey: 'Id_Evento'
+    }
+);
+
+Pedido.belongsTo(
+    Evento,
+    {
+        foreignKey: 'Id_Evento'
+    }
+)
+
 // f para establecer la conexión a la base de datos
 
 export const connect = async function() {
