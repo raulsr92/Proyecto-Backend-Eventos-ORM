@@ -275,20 +275,25 @@ export const update = async function (Id_Pedido, objPedido) {
  
     console.log("----------------------Modelo Modificar Pedido--------------------")
 
-    const [results,fields] = await orm.query( 
-        `update tb_pedido 
-            set monto_total_pedido = ?, id_mediopago= ?, id_usuario=?, Id_Evento = ? 
-        where id_pedido = ?`,
-        {
-            replacements:[objPedido.monto_total_pedido,objPedido.id_mediopago,objPedido.id_usuario,objPedido.Id_Evento,Id_Pedido]
-        }
-    )
-        
-
-    console.log(`Resultados de modelo:`);
-    console.log(results);
-    console.log(`Obteniendo n° filas afectadas:`);
-    console.log(results.affectedRows);
-
-    return results.affectedRows;
+    try {
+        const [updatedRows] = await Pedido.update(
+            {
+            monto_total_pedido: objPedido.monto_total_pedido,
+            id_mediopago:       objPedido.id_mediopago,
+            id_usuario:         objPedido.id_usuario,
+            Id_Evento:          objPedido.Id_Evento,        
+            },
+            {
+                where:{
+                    id_pedido: Id_Pedido
+                }
+            }
+        )
+        console.log(`Resultados en modelo:`)
+        console.log(`Filas afectadas: ${updatedRows}`);
+        return updatedRows;        
+    } catch (error) {
+        console.error("Error al actualizar evento:", error.message);
+        throw error;
+    }
 }
