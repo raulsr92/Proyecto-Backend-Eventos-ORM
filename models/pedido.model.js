@@ -4,7 +4,80 @@ import orm from '../config/sequelize.js'
 //Importación de módulos
 import { Sequelize,DataTypes, or, } from 'sequelize';
 
+//Importación de modelos relacionados (claves foráneas)
+import {MedioPago} from './medioPago.model.js';
+import {Usuario} from './usuario.model.js';
+import {Evento} from './evento.model.js';
 
+//Definiendo modelo "Pedido"
+
+export const Pedido = orm.define('tb_pedido',
+    {
+        id_pedido:{
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            allowNull: false,
+            autoIncrement:true
+        },
+        fecha_pedido:{
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+            validate:{
+                isDate: true,
+            }
+        },
+        monto_total_pedido:{
+            type: DataTypes.DECIMAL(10,2),
+            allowNull:false,
+            validate:{
+                isNumeric:true,
+                min:0.01,
+                notNull: { msg: "El monto total del pedido es obligatorio" }
+            }
+        },
+        id_mediopago:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate:{
+                isInt: true,
+                min:1
+            },
+            references:{
+                model: MedioPago,
+                key: 'id_mediopago'
+            }
+        },
+        id_usuario:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate:{
+                isInt: true,
+                min:1
+            },
+            references:{
+                model: Usuario,
+                key: 'id_usuario'
+            }
+        },
+        Id_Evento:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate:{
+                isInt: true,
+                min:1
+            },
+            references:{
+                model: Evento,
+                key: 'Id_Evento'
+            }
+        }
+    },
+    {
+        freezeTableName: true,
+        tableName: 'tb_pedido',
+        timestamps: false,
+    }
+)
 
 // f para establecer la conexión a la base de datos
 
