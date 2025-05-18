@@ -243,22 +243,30 @@ export const create = async function (objPedido) {
  
     
     console.log("----------------------Modelo Insertar nuevo Pedido--------------------")
-    
-    const [results,fields] = await orm.query(
-        `INSERT INTO tb_pedido  (fecha_pedido,monto_total_pedido,id_mediopago, id_usuario, Id_Evento ) 
-                         VALUES (now(),?,?,?,?)`,
-        {
-            replacements: [objPedido.monto_total_pedido, objPedido.id_mediopago,objPedido.id_usuario,objPedido.Id_Evento]
-        }
-    )
-        
-             
-    console.log(`Resultados de servico CREATE pedidos`);
-    console.log(results);
-    console.log(`Obteniendo ID generado:`);
-    console.log(results);
 
-    return results;
+        try {
+            const pedido = await Pedido.create(
+        {
+            monto_total_pedido: objPedido.monto_total_pedido,
+            id_mediopago:       objPedido.id_mediopago,
+            id_usuario:         objPedido.id_usuario,
+            Id_Evento:          objPedido.Id_Evento,
+           
+        });
+
+        console.log(`Resultados en modelo:`)
+        console.log(pedido)
+        console.log(`ID de Evento Insertado:`)
+        console.log(pedido.toJSON().id_pedido)
+
+        return pedido.toJSON().id_pedido;
+
+    } catch (error) {
+        console.error("Error al insertar evento:", error.message);
+        throw error;
+    }
+    
+
 }
 
 // ⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩⟨~⟩  Método update
