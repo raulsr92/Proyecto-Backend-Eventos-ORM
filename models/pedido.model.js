@@ -193,34 +193,47 @@ export const getById = async function (Id_Pedido) {
  
     console.log("----------------------Model Listar por ID pedidos--------------------")
     
-
-    const [results,fields] = await orm.query(
-        `select 
-            P.id_pedido,U.nom_usuario,U.correo_usuario,
-            P.fecha_pedido,P.monto_total_pedido,
-            MP.nombre_mediopago,
-            E.Nombre_Evento 
-        from tb_pedido P 
-        inner join tb_usuario U 
-         on P.id_usuario = U.id_usuario 
-        inner join tb_evento E 
-         on P.Id_Evento = E.Id_Evento 
-        inner join tb_mediopago MP
-         on MP.id_mediopago = P.id_mediopago 
-         where id_pedido = ?`,
+    const results = await Pedido.findAll(
         {
-            replacements:[Id_Pedido]
+            //Campos que quiero mostrar de la tabla Pedidos
+            attributes: ['id_pedido','fecha_pedido','monto_total_pedido'],
+            include:
+            [
+                {
+                    model: Usuario,
+                    //Campos que quiero mostrar que pertenecen a Usuario
+                    attributes:['nom_usuario','correo_usuario']
+                },
+                {
+                    model: Evento,
+                    //Campos que quiero mostrar que pertenecen a Evento
+                    attributes:['Nombre_Evento']
+                },
+                                {
+                    model: MedioPago,
+                    //Campos que quiero mostrar que pertenecen a Medio de Pago
+                    attributes:['nombre_mediopago']
+                }
+                
+            ],
+            where:{
+                Id_Pedido: Id_Pedido
+            }
         }
     )
-         
 
-    console.log(`Resultados de modelo GETBYID pedidos`);
-    console.log(`Id solicitado: ${Id_Pedido}`);
-    console.log(`Pedido (solo objeto): `);
-    console.log(results[0]);
-    console.log(`Pedido (array completo): `);
-    console.log(results);
-    return results[0]
+    
+    return results.map(p=>(
+        {
+            id_pedido: p.id_pedido,
+            nom_usuario: p.tb_usuario.nom_usuario,
+            correo_usuario: p.tb_usuario.correo_usuario,
+            fecha_pedido: p.fecha_pedido, 
+            monto_total_pedido: p.monto_total_pedido,
+            nombre_mediopago: p.tb_mediopago.nombre_mediopago,
+            Nombre_Evento:p.tb_evento.Nombre_Evento
+
+        }));
 }
 
 
