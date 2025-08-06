@@ -54,7 +54,7 @@ export const getAll = async function (req, res) {
     try {
         let eventos = await seventos.getAll();
         console.log("....despues de seventos.getAll()");
-        res.json(eventos || [] )
+        res.json("Eventos:"+eventos || [] )
 
     } catch (error) {
         res.status(500).json({"error":"Error obteniendo registros"});
