@@ -1,6 +1,6 @@
 
 const PUERTO=4001;
-export const FRONTEND_URL='http://localhost:3000';
+export const FRONTEND_URL='http://localhost:5173';
 
 export const JWT_SECRET = process.env.JWT_SECRET
 export const JWT_EXPIRES='1min';
